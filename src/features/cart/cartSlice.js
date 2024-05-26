@@ -16,15 +16,47 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.products = [];
     },
+
     //remove item
-    removeItem: (state, actions) => {
-      const itemId = actions.payload;
+    removeItem: (state, action) => {
+      const itemId = action.payload;
       state.products = state.products.filter((item) => item.id !== itemId);
+    },
+
+    //***Increase the amount
+    increase: (state, action) => {
+      // console.log(action)
+      const product = state.products.find(
+        (item) => item.id === action.payload.id
+      );
+      product.amount = product.amount + 1;
+    },
+
+    //***Decrease the amount
+    decrease: (state, action) => {
+      // console.log(action)
+      const product = state.products.find(
+        (item) => item.id === action.payload.id
+      );
+      product.amount = product.amount - 1;
+    },
+
+    // Total price and amount
+    calculateTotal: (state) => {
+      let amount = 0;
+      let total = 0;
+      state.products.forEach((item) => {
+        amount += item.amount;
+        total += item.amount * item.price;
+      });
+      state.amount = amount;
+      state.total = total;
     },
   },
 });
-console.log(cartSlice);
+// console.log(cartSlice);
 
-export const { clearCart, removeItem } = cartSlice.actions;
+export const { clearCart, removeItem, increase, decrease, calculateTotal } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
